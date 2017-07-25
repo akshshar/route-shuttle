@@ -406,7 +406,6 @@ class RouteShuttle(object):
                         # route add and update
 
                         route_check = self.plugin.is_valid_route(route)
-                        print route_check 
 
                         if route_check['valid'] :
                             route_tuple = (self.plugin.get_route_prefix(route),self.plugin.get_route_prefixlen(route))
