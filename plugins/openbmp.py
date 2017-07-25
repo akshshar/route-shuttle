@@ -3,7 +3,7 @@
 import subprocess, ipaddress
 from functools import partial
 from base import BasePlugin
-from routeshuttle.rshuttle import logger
+from rshuttle import logger
 
 ROUTE_OIF = 0x10
 ROUTE_SINGLEPATH = 0x11
