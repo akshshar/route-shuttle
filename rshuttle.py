@@ -7,7 +7,7 @@ from socket import AF_INET, AF_INET6
 import logging, logging.handlers
 logging.basicConfig()
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 # Add the generated python bindings directory to the path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
@@ -60,6 +60,7 @@ class RouteShuttle(object):
     def setup_grpc_channel(self):
 
         logger.info("Using GRPC Server IP(%s) Port(%s)" %(self.server_ip, self.server_port))
+        
         # Create the channel for gRPC.
         channel = implementations.insecure_channel(self.server_ip, self.server_port)
         # Spawn a thread to Initialize the client and listen on notifications
@@ -405,6 +406,8 @@ class RouteShuttle(object):
                         # route add and update
 
                         route_check = self.plugin.is_valid_route(route)
+                        print route_check 
+
                         if route_check['valid'] :
                             route_tuple = (self.plugin.get_route_prefix(route),self.plugin.get_route_prefixlen(route))
                             response, verdict = self.prefix_in_rib(route)
@@ -413,12 +416,12 @@ class RouteShuttle(object):
                             # or if the route is present in the current batch itself
                             if (verdict or
                                 route_tuple in batch_prefixset_v4):
-                                if self.plugin.route_events[route['event']] == 'add':
+                                if self.plugin.route_events[self.plugin.get_route_event(route)] == 'add':
                                     route_event = 'update'
                                 else:
-                                    route_event = self.plugin.route_events[route['event']]
+                                    route_event = self.plugin.route_events[self.plugin.get_route_event(route)]
                             else:
-                                route_event = self.plugin.route_events[route['event']]
+                                route_event = self.plugin.route_events[self.plugin.get_route_event(route)]
 
                             batch_prefixset_v4.add((self.plugin.get_route_prefix(route), self.plugin.get_route_prefixlen(route)))
 
