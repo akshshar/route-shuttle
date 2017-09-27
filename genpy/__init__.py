@@ -1,1 +1,4 @@
-# Place the generated python bindings in this folder
+#
+# Copyright (c) 2016 by cisco Systems, Inc. 
+# All rights reserved.
+#
